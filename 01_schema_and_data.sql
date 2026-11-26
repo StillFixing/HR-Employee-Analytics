@@ -10,7 +10,7 @@ USE employee_db;
 CREATE TABLE departments (
     dept_name VARCHAR(50) PRIMARY KEY,
     manager_name VARCHAR(100),
-    budget DECIMAL(12,2)
+    budget DECIMAL(12,2) CHECK (budget >= 0) -- CHECK Constraint
 );
 
 -- 2. Create Employees Table
@@ -18,21 +18,24 @@ CREATE TABLE employees (
     employee_id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     dept_name VARCHAR(50),
-    salary DECIMAL(10,2) NOT NULL,
+    salary DECIMAL(10,2) NOT NULL CHECK (salary >= 0), -- CHECK Constraint
     phone_number VARCHAR(15),
     birth_date DATE,
     email VARCHAR(100),
     FOREIGN KEY (dept_name) REFERENCES departments(dept_name)
 );
 
--- 3. Insert Department Data
+-- 3. Create an INDEX on the foreign key for faster JOINs
+CREATE INDEX idx_emp_dept ON employees(dept_name);
+
+-- 4. Insert Department Data
 INSERT INTO departments (dept_name, manager_name, budget) VALUES
 ('comp', 'Mr. Sharma', 500000),
 ('eng', 'Ms. Verma', 800000),
 ('sales', 'Mr. Gupta', 300000),
 ('hr', 'Mrs. Singh', 200000);
 
--- 4. Insert Employee Data (I've added a few real examples here)
+-- 5. Insert Employee Data
 INSERT INTO employees (name, dept_name, salary, phone_number, birth_date, email) VALUES
 ('Ajoy Sharma', 'eng', 65000, '98765-43210', '1998-05-12', 'ajoy@gmail.com'),
 ('Raj Patel', 'eng', 72000, '9823456781', '1995-11-20', 'raj.patel@gmail.com'),
